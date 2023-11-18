@@ -286,11 +286,30 @@ require("lspconfig").zls.setup({
 Here's how to enable inlay hints for [`pylyzer`](https://github.com/mtshiba/pylyzer)
 
 ```lua
-require('lspconfig').pylyzer.setup({
+require("lspconfig").pylyzer.setup({
   settings = {
     python = {
       inlayHints = true
     }
   }
 })
+```
+
+### kotline-language-server
+
+Here's how to enable inlay hints for [`kotlin-language-server`](https://github.com/fwcd/kotlin-language-server)
+
+```lua
+require("lspconfig").kotlin_language_server.setup({
+  settings = {
+    kotlin = {
+      hints = {
+        typeHints = true,
+        parameterHints = true,
+        chaineHints = true,
+      },
+    },
+  }
+})
+
 ```
