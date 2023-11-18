@@ -10,7 +10,7 @@ local M = {}
 
 M.setup = function(user_config)
   vim.validate({ user_config = { user_config, "table", true } })
-  require("inlay-hints").config.load(user_config)
+  require("inlay-hints.config").load(user_config)
 end
 
 M.on_attach = require("inlay-hints.utils").on_attach

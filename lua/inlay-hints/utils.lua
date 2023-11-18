@@ -46,7 +46,7 @@ local function lsp_attach_inlay_hints(args)
   local client = vim.lsp.get_client_by_id(args.data.client_id)
 
   if client and M.not_proxy_lsp(client.name) then
-    M.set_inlay_hints(client, bufnr)
+    setup_inlay_hints(client, bufnr)
   end
 end
 
