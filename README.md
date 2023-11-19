@@ -295,7 +295,7 @@ require("lspconfig").pylyzer.setup({
 })
 ```
 
-### kotline-language-server
+### kotlin-language-server
 
 Here's how to enable inlay hints for [`kotlin-language-server`](https://github.com/fwcd/kotlin-language-server)
 
