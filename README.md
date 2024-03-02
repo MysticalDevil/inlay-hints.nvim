@@ -100,6 +100,28 @@ require("lspconfig").clangd.setup({
 })
 ```
 
+### denols
+
+Here's how to enable inlay hints for [`denols`](https://github.com/denoland/deno/blob/main/cli/lsp)
+
+```lua
+require("lspconfig").denols.setup({
+  settings = {
+    deno = {
+      inlayHints = {
+        parameterNames = { enabled = "all", suppressWhenArgumentMatchesName = true },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true, suppressWhenTypeMatchesName = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enable = true },
+        enumMemberValues = { enabled = true },
+      },
+    }
+  }
+})
+```
+
+
 ### gopls
 
 Here's how to enable inlay hints for [`gopls`](https://pkg.go.dev/golang.org/x/tools/gopls)
@@ -120,17 +142,59 @@ require("lspconfig").gopls.setup({
 })
 ```
 
-### rust-alalyzer
+### rust-analyzer
 
-If you're using `simrat39/rust-tools.nvim`, you can enable it like
+If you're using `mrcjkb/rustaceanvim`, you can enable it like
 
 ```lua
-require("rust-tools").setup({
-  inlay_hints = {
-    auto = false
-  },
+vim.g.rustaceanvim = {
   server = {
     settings = {
+      ["rust-analyzer"] = {
+        inlayHints = {
+          bindingModeHints = {
+            enable = false,
+          },
+          chainingHints = {
+            enable = true,
+          },
+          closingBraceHints = {
+            enable = true,
+            minLines = 25,
+          },
+          closureReturnTypeHints = {
+            enable = "never",
+          },
+          lifetimeElisionHints = {
+            enable = "never",
+            useParameterNames = false,
+          },
+          maxLength = 25,
+          parameterHints = {
+            enable = true,
+          },
+          reborrowHints = {
+            enable = "never",
+          },
+          renderColons = true,
+          typeHints = {
+            enable = true,
+            hideClosureInitialization = false,
+            hideNamedConstructor = false,
+          },
+        },
+      },
+    },
+  },
+}
+```
+
+Here's how to enable inlay hints for [`rust-analyzer`](https://github.com/rust-lang/rust-analyzer)
+
+```lua
+require("lspconfig").rust_analyzer.setup({
+  settings = {
+    ["rust-analyzer"] = {
       inlayHints = {
         bindingModeHints = {
           enable = false,
@@ -168,48 +232,7 @@ require("rust-tools").setup({
 })
 ```
 
-Here's how to enable inlay hints for [`rust-analyzer`](https://github.com/rust-lang/rust-analyzer)
-
-```lua
-require("lspconfig").rust_analyzer.setup({
-  settings = {
-    inlayHints = {
-      bindingModeHints = {
-        enable = false,
-      },
-      chainingHints = {
-        enable = true,
-      },
-      closingBraceHints = {
-        enable = true,
-        minLines = 25,
-      },
-      closureReturnTypeHints = {
-        enable = "never",
-      },
-      lifetimeElisionHints = {
-        enable = "never",
-        useParameterNames = false,
-      },
-      maxLength = 25,
-      parameterHints = {
-        enable = true,
-      },
-      reborrowHints = {
-        enable = "never",
-      },
-      renderColons = true,
-      typeHints = {
-        enable = true,
-        hideClosureInitialization = false,
-        hideNamedConstructor = false,
-      },
-    },
-  }
-})
-```
-
-### typescript-language-server(tsserver)
+### typescript-language-server (tsserver)
 
 If you're using `pmizio/typescript-tools.nvim`, you enable it like this
 
@@ -312,4 +335,23 @@ require("lspconfig").kotlin_language_server.setup({
   }
 })
 
+```
+
+### eclipse.jdt.ls
+
+Here's how to enable inlay hints for [`eslipse.jdt.ls`](https://github.com/eclipse-jdtls/eclipse.jdt.ls)
+
+```lua
+require("lspconfig").jdtls.setup({
+  settings = {
+    java = {
+      inlayHints = {
+        parameterNames = {
+          enabled = "all",
+          exclusions = { "this" },
+        },
+      },
+    }
+  }
+})
 ```
