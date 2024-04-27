@@ -32,7 +32,7 @@ local function setup_inlay_hints(client, bufnr)
   end
 
   if client.supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
-    inlay_hint.enable(bufnr, true)
+    inlay_hint.enable(true, { bufnr = bufnr })
   end
 end
 
@@ -69,21 +69,21 @@ end
 
 function M.toggle_inlay_hints()
   if inlay_hint.is_enabled() then
-    inlay_hint.enable(nil, false)
+    inlay_hint.enable(false, nil)
   else
-    inlay_hint.enable(nil, true)
+    inlay_hint.enable(true, nil)
   end
 end
 
 function M.enable_inlay_hints()
   if not inlay_hint.is_enabled() then
-    inlay_hint.enable(nil, true)
+    inlay_hint.enable(true, nil)
   end
 end
 
 function M.disable_inlay_hints()
   if inlay_hint.is_enabled() then
-    inlay_hint.enable(nil, false)
+    inlay_hint.enable(false, nil)
   end
 end
 
