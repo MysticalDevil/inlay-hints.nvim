@@ -355,3 +355,31 @@ require("lspconfig").jdtls.setup({
   }
 })
 ```
+
+### OmniSharp
+
+Here's how to enable inlay hints for [`OmniSharp`](https://github.com/OmniSharp/omnisharp-roslyn)
+~~might work~~
+
+```lua
+require("lspconfig").omnisharp.setup({
+  settings = {
+    RoslynExtensionsOptions = {
+        InlayHintsOptions = {
+        EnableForParameters = true,
+        ForLiteralParameters = true,
+        ForIndexerParameters = true,
+        ForObjectCreationParameters = true,
+        ForOtherParameters = true,
+        SuppressForParametersThatDifferOnlyBySuffix = false,
+        SuppressForParametersThatMatchMethodIntent = false,
+        SuppressForParametersThatMatchArgumentName = false,
+        EnableForTypes = true,
+        ForImplicitVariableTypes = true,
+        ForLambdaParameterTypes = true,
+        ForImplicitObjectCreatio = true,
+      },
+    },
+  }
+})
+```
