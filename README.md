@@ -2,6 +2,9 @@
 
 A plugin to simplify enabling neovim offical [inlay hints](https://github.com/neovim/neovim/pull/23426)
 
+!> [!IMPORTANT]
+> This is a VERY SIMPLE plugin. I just integrated how to enable the inlay hint of each LSP.
+
 ## Installation
 
 Add `MysticalDevil/inlay-hints.nvim` using your favorite plugin manager, like this:
