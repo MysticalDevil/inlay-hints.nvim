@@ -307,6 +307,25 @@ require("lspconfig").zls.setup({
 })
 ```
 
+### basedpyright
+
+Here's how to enable inlay hints for [`basedpyright`](https://github.com/DetachHead/basedpyright)
+When you configure inlay hint correctly, the basedpyright's feature will be automatically enabled.
+
+```lua
+required('lspconfig').basedpyright.setup({
+  settings = {
+    basedpyright = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true
+      }
+    }
+  }
+})
+```
+
 ### pylyzer
 
 Here's how to enable inlay hints for [`pylyzer`](https://github.com/mtshiba/pylyzer)
