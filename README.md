@@ -289,6 +289,27 @@ require("lspconfig").tsserver.setup({
 })
 ```
 
+### svelte-language-server
+
+Here's how to enable inlay hints for [`svelte-language-server`](https://github.com/sveltejs/language-tools)
+
+```lua
+require('lspconfig').svelte.setup {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = 'all' },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+}
+```
+
 ### zls
 
 Here's how to enable inlay hints for [`zls`](https://github.com/zigtools/zls)
