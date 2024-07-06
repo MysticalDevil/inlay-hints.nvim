@@ -310,6 +310,33 @@ require('lspconfig').svelte.setup {
 }
 ```
 
+### vtsls
+
+Here's how to enable inlay hints for [`vtsls`](https://github.com/yioneko/vtsls)
+
+> contribute by [`lucicoreyli`](https://github.com/lucioreyli)
+
+```lua
+require('lspconfig').vtsls.setup {
+  -- capabilities = capabilities,
+  -- flags = lsp_flags,
+  -- on_attach = on_attach,
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = 'all' },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+}
+```
+
+>>>>>>> c9eae1e (chore: Add vtsls config doc)
 ### zls
 
 Here's how to enable inlay hints for [`zls`](https://github.com/zigtools/zls)
