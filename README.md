@@ -361,7 +361,7 @@ Here's how to enable inlay hints for [`basedpyright`](https://github.com/DetachH
 When you configure inlay hint correctly, the basedpyright's feature will be automatically enabled.
 
 ```lua
-required('lspconfig').basedpyright.setup({
+require('lspconfig').basedpyright.setup({
   settings = {
     basedpyright = {
       analysis = {
