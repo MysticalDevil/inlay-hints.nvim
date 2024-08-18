@@ -336,7 +336,6 @@ require('lspconfig').vtsls.setup {
 }
 ```
 
->>>>>>> c9eae1e (chore: Add vtsls config doc)
 ### zls
 
 Here's how to enable inlay hints for [`zls`](https://github.com/zigtools/zls)
