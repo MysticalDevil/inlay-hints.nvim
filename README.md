@@ -132,15 +132,17 @@ Here's how to enable inlay hints for [`gopls`](https://pkg.go.dev/golang.org/x/t
 ```lua
 require("lspconfig").gopls.setup({
   settings = {
-    hints = {
-      rangeVariableTypes = true,
-      parameterNames = true,
-      constantValues = true,
-      assignVariableTypes = true,
-      compositeLiteralFields = true,
-      compositeLiteralTypes = true,
-      functionTypeParameters = true,
-    },
+    gopls = {
+      hints = {
+        rangeVariableTypes = true,
+        parameterNames = true,
+        constantValues = true,
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        functionTypeParameters = true,
+      },
+    }
   }
 })
 ```
