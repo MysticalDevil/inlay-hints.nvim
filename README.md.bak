@@ -1,0 +1,449 @@
+b# inlay-hints.nvim
+
+A plugin to simplify enabling neovim offical [inlay hints](https://github.com/neovim/neovim/pull/23426)
+
+> [!IMPORTANT]
+> This is a VERY SIMPLE plugin. I just integrated how to enable the inlay hint of each LSP.</br>
+> Please try not to integrate it into your Neovim configuration.
+
+## Installation
+
+Add `MysticalDevil/inlay-hints.nvim` using your favorite plugin manager, like this:
+
+[lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+require("lazy").setup({
+    "MysticalDevil/inlay-hints.nvim",
+    event = "LspAttach",
+    dependencies = { "neovim/nvim-lspconfig" }, -- Optional
+    config = function()
+        require("inlay-hints").setup()
+    end
+})
+```
+
+[pckr.nvim](https://github.com/lewis6991/pckr.nvim)
+
+```lua
+require("pckr").add({
+    "MysticalDevil/inlay-hints.nvim",
+    requires = { "neovim/nvim-lspconfig" }, -- Optional
+    config = function()
+        require("inlay-hints").setup()
+    end
+})
+```
+
+If you don't want to enable it globally, you can config at the `on_attach` function
+
+**on_attach**
+
+```lua
+require("lspconfig").[server_name].setup({
+  on_attach = function(client, bufnr)
+    require("inlay-hints").on_attach(client, bufnr)
+  end
+})
+```
+
+## Configuration
+
+### Default config
+
+You only need to pass the options you want to override.
+
+```lua
+require("inlay-hints").setup({
+  commands = { enable = true }, -- Enable InlayHints commands, include `InlayHintsToggle`, `InlayHintsEnable` and `InlayHintsDisable`
+  autocmd = { enable = true } -- Enable the inlay hints on `LspAttach` event
+})
+```
+
+## Languages
+
+The inlay hints is not enabled by default, so you need the following settings, use [`nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig)
+
+> You should make sure that the LSP you are using supported inlay hints
+
+> Please ensure your Neovim version is 0.11 or higher. This version already has built-in LSP configuration support. The plugin 'nvim-lspconfig' is optional and is currently used to provide the default configuration for LSPs.
+
+### lua_ls
+
+Here's how to enable inlay hints for [`lua-language-server`](https://github.com/LuaLS/lua-language-server)
+
+```lua
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      hint = {
+        enable = true, -- necessary
+      }
+    }
+  }
+})
+```
+
+### clangd
+
+If you're using `p00f/clangd_extensions.nvim`, please set `autoSetHints = false`
+
+Here's how to enable inlay hints for [`clangd`](https://github.com/clangd/clangd)
+
+```lua
+vim.lsp.config("clangd", {
+  settings = {
+    clangd = {
+      InlayHints = {
+        Designators = true,
+        Enabled = true,
+        ParameterNames = true,
+        DeducedTypes = true,
+      },
+      fallbackFlags = { "-std=c++20" },
+    },
+  }
+})
+```
+
+### denols
+
+Here's how to enable inlay hints for [`denols`](https://github.com/denoland/deno/blob/main/cli/lsp)
+
+```lua
+vim.lsp.config("denols", {
+  settings = {
+    deno = {
+      inlayHints = {
+        parameterNames = { enabled = "all", suppressWhenArgumentMatchesName = true },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true, suppressWhenTypeMatchesName = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enable = true },
+        enumMemberValues = { enabled = true },
+      },
+    }
+  }
+})
+```
+
+
+### gopls
+
+Here's how to enable inlay hints for [`gopls`](https://pkg.go.dev/golang.org/x/tools/gopls)
+
+```lua
+vim.lsp.config("gopls", {
+  settings = {
+    gopls = {
+      hints = {
+        rangeVariableTypes = true,
+        parameterNames = true,
+        constantValues = true,
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        functionTypeParameters = true,
+      },
+    }
+  }
+})
+```
+
+### rust-analyzer
+
+Here's how to enable inlay hints for [`rust-analyzer`](https://github.com/rust-lang/rust-analyzer)
+
+```lua
+vim.lsp.config("rust_analyzer", {
+  settings = {
+    ["rust-analyzer"] = {
+      inlayHints = {
+        bindingModeHints = {
+          enable = false,
+        },
+        chainingHints = {
+          enable = true,
+        },
+        closingBraceHints = {
+          enable = true,
+          minLines = 25,
+        },
+        closureReturnTypeHints = {
+          enable = "never",
+        },
+        lifetimeElisionHints = {
+          enable = "never",
+          useParameterNames = false,
+        },
+        maxLength = 25,
+        parameterHints = {
+          enable = true,
+        },
+        reborrowHints = {
+          enable = "never",
+        },
+        renderColons = true,
+        typeHints = {
+          enable = true,
+          hideClosureInitialization = false,
+          hideNamedConstructor = false,
+        },
+      },
+    }
+  }
+})
+```
+
+### typescript-language-server (tsserver)
+
+If you're using `pmizio/typescript-tools.nvim`, you enable it like this
+
+```lua
+require("typescript-tools").setup({
+  settings = {
+    tsserver_file_preferences = {
+      includeInlayParameterNameHints = "all",
+      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayVariableTypeHints = true,
+      includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+      includeInlayPropertyDeclarationTypeHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayEnumMemberValueHints = true,
+    }
+  }
+})
+```
+
+Here's how to enable inlay hints for [`tsserver`](<https://github.com/microsoft/TypeScript/wiki/Standalone-Server-(tsserver)>)
+
+```lua
+vim.lsp.config("tsserver", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
+    },
+    javascript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
+    },
+  }
+})
+```
+
+### tsgo
+
+Here's how to enable inlay hints for [`tsgo`](https://github.com/microsoft/typescript-go)
+
+```lua
+vim.lsp.config("tsgo", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = "literals" }, -- "none" | "literals" | "all"
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  }
+})
+```
+
+### svelte-language-server
+
+Here's how to enable inlay hints for [`svelte-language-server`](https://github.com/sveltejs/language-tools)
+
+```lua
+vim.lsp.config("svelte", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = 'all' },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+})
+```
+
+### vtsls
+
+Here's how to enable inlay hints for [`vtsls`](https://github.com/yioneko/vtsls)
+
+> contribute by [`lucicoreyli`](https://github.com/MysticalDevil/inlay-hints.nvim/issues/4)
+
+```lua
+vim.lsp.config("vtsls", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = 'all' },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+})
+```
+
+### zls
+
+Here's how to enable inlay hints for [`zls`](https://github.com/zigtools/zls)
+
+```lua
+vim.lsp.config("zls", {
+  settings = {
+    zls = {
+      enable_inlay_hints = true,
+      inlay_hints_show_builtin = true,
+      inlay_hints_exclude_single_argument = true,
+      inlay_hints_hide_redundant_param_names = false,
+      inlay_hints_hide_redundant_param_names_last_token = false,
+    },
+  }
+})
+```
+
+### basedpyright
+
+Here's how to enable inlay hints for [`basedpyright`](https://github.com/DetachHead/basedpyright)
+When you configure inlay hint correctly, the basedpyright's feature will be automatically enabled.
+
+```lua
+vim.lsp.config("basedpyright", {
+  settings = {
+    basedpyright = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = "openFilesOnly",
+        useLibraryCodeForTypes = true
+      }
+    }
+  }
+})
+```
+
+### ty
+
+Here's how to enable inlay hints for [`ty`](https://github.com/astral-sh/ty)
+```lua
+vim.lsp.config("ty", {
+  settings = {
+    ty = {
+      inlayHints = {
+        variableTypes = true,
+        callArgumentNames = true,
+      },
+    }
+  }
+})
+```
+
+
+### pylyzer
+
+Here's how to enable inlay hints for [`pylyzer`](https://github.com/mtshiba/pylyzer)
+
+```lua
+vim.lsp.config("pylyzer", {
+  settings = {
+    python = {
+      inlayHints = true
+    }
+  }
+})
+```
+
+### kotlin-language-server
+
+Here's how to enable inlay hints for [`kotlin-language-server`](https://github.com/fwcd/kotlin-language-server)
+
+```lua
+vim.lsp.config("kotlin_language_server", {
+  settings = {
+    kotlin = {
+      hints = {
+        typeHints = true,
+        parameterHints = true,
+        chaineHints = true,
+      },
+    },
+  }
+})
+
+```
+
+### eclipse.jdt.ls
+
+Here's how to enable inlay hints for [`eslipse.jdt.ls`](https://github.com/eclipse-jdtls/eclipse.jdt.ls)
+
+```lua
+vim.lsp.config("jdtls", {
+  settings = {
+    java = {
+      inlayHints = {
+        parameterNames = {
+          enabled = "all",
+          exclusions = { "this" },
+        },
+      },
+    }
+  }
+})
+```
+
+### OmniSharp
+
+Here's how to enable inlay hints for [`OmniSharp`](https://github.com/OmniSharp/omnisharp-roslyn)
+~~might work~~
+
+```lua
+vim.lsp.config("omnisharp", {
+  settings = {
+    RoslynExtensionsOptions = {
+        InlayHintsOptions = {
+        EnableForParameters = true,
+        ForLiteralParameters = true,
+        ForIndexerParameters = true,
+        ForObjectCreationParameters = true,
+        ForOtherParameters = true,
+        SuppressForParametersThatDifferOnlyBySuffix = false,
+        SuppressForParametersThatMatchMethodIntent = false,
+        SuppressForParametersThatMatchArgumentName = false,
+        EnableForTypes = true,
+        ForImplicitVariableTypes = true,
+        ForLambdaParameterTypes = true,
+        ForImplicitObjectCreatio = true,
+      },
+    },
+  }
+})
+```
