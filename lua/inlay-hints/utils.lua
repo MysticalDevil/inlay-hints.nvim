@@ -2,22 +2,6 @@ local M = {}
 
 local inlay_hint = vim.lsp.inlay_hint
 
--- Proxy LSP names, which not provide general LSP features
-local proxy_lsps = {
-  ["null-ls"] = true,
-  ["efm"] = true,
-  ["emmet_ls"] = true,
-  ["eslint"] = true,
-  ["cssmodule_ls"] = true,
-}
-
--- Determine whether the obtained LSP is a proxy LSP
----@param name string
----@return boolean
-function M.not_proxy_lsp(name)
-  return not proxy_lsps[name]
-end
-
 -- Setup inlay hints feature for supported LSP
 ---@param client (table|nil)
 ---@param bufnr (integer|nil)
@@ -27,13 +11,30 @@ local function setup_inlay_hints(client, bufnr)
     return
   end
 
-  if client.name == "zls" then
-    vim.g.zig_fmt_autosave = 1
+  -- Filtering unstable LSPs
+  local unstable = {
+    phpactor = true,
+    tsserver = false,
+  }
+  if unstable[client.name] then
+    vim.notify(("Skip inlay hints for LSP: %s"):format(client.name), vim.log.levels.ERROR)
+    return
   end
 
-  if client:supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider then
-    inlay_hint.enable(true, { bufnr = bufnr })
+  local ok = client:supports_method("textDocument/inlayHint") or client.server_capabilities.inlayHintProvider
+  if not ok then
+    -- vim.notify(("Client do not support inlay hints: %s"):format(client.name), vim.log.levels.WARN)
+    return
   end
+
+  if vim.b[bufnr].inlay_hints_enabled then
+    return
+  end
+  vim.b[bufnr].inlay_hints_enabled = true
+
+  pcall(function()
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+  end)
 end
 
 ---@param args table
@@ -45,9 +46,7 @@ local function lsp_attach_inlay_hints(args)
   local bufnr = args.buf
   local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-  if client and M.not_proxy_lsp(client.name) then
-    setup_inlay_hints(client, bufnr)
-  end
+  setup_inlay_hints(client, bufnr)
 end
 
 function M.on_attach(client, bufnr)
@@ -68,11 +67,7 @@ function M.enable_inlay_hints_autocmd()
 end
 
 function M.toggle_inlay_hints()
-  if inlay_hint.is_enabled() then
-    inlay_hint.enable(false, nil)
-  else
-    inlay_hint.enable(true, nil)
-  end
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
 end
 
 function M.enable_inlay_hints()
