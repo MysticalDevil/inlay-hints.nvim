@@ -199,6 +199,45 @@ vim.lsp.config("rust_analyzer", {
 })
 ```
 
+*If you're still using Rustacest Vim as your Rust tooling and have installed mason.nvim and mason-lspconfig.nvim, you can refer to the following configuration*
+
+To prevent duplicate launches of rust-analyzer instances by rustaceanvim (ftplugin) and mason-lspconfig, exclude this Server from the latter's configuration.
+```lua
+require("mason-lspconfig").setup({
+  automatic_enable = {
+    exclude = {
+      "rust_analyzer",
+    },
+  },
+})
+```
+
+Configure the following in lazy.nvim for rustaceanvim:
+```lua
+{
+  "mrcjkb/rustaceanvim",
+  version = "^7", -- Recommended
+  ft = { "rust" },
+  lazy = false,
+  init_option = function()
+    vim.g.rustaceanvim = {
+      server = {
+        default_settings = {
+          ["rust-analyzer"] = {
+            inlayHints = {
+              chainingHints = { enable = true },
+              closingBraceHints = { enable = true, minLines = 25 },
+              parameterHints = { enable = true },
+              typeHints = { enable = true },
+            },
+          },
+        },
+      },
+    }
+  end,
+}
+```
+
 ---
 
 ### tsserver (typescript-language-server)
