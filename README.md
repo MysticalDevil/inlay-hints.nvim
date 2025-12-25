@@ -492,7 +492,7 @@ vim.lsp.config("omnisharp", {
 
 ### Ruby LSP
 
-Source: https://shopify.github.io/ruby-lsp
+Source: https://shopify.github.io/ruby-lsp#inlay-hints
 
 ```lua
 vim.lsp.config("ruby_lsp", {
