@@ -322,7 +322,6 @@ vim.lsp.config("svelte", {
 ### vtsls
 
 Source: https://github.com/yioneko/vtsls
-Contributed by: https://github.com/lucicoreyli
 
 ```lua
 vim.lsp.config("vtsls", {
@@ -457,6 +456,7 @@ vim.lsp.config("jdtls", {
 })
 ```
 
+
 ---
 
 ### OmniSharp
@@ -490,6 +490,25 @@ vim.lsp.config("omnisharp", {
 
 ---
 
+### Ruby LSP
+
+Source: https://shopify.github.io/ruby-lsp#inlay-hints
+
+```lua
+vim.lsp.config("ruby_lsp", {
+  init_options = {
+    featuresConfiguration = {
+      inlayHint = {
+        enableAll = true,
+        implicitRescue = true,
+        implicitHashValue = true,
+      },
+    },
+  },
+})
+```
+
+---
 ## License
 
 Apache 2.0
