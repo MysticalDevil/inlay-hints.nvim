@@ -30,11 +30,22 @@ local function setup_inlay_hints(client, bufnr)
   if vim.b[bufnr].inlay_hints_enabled then
     return
   end
-  vim.b[bufnr].inlay_hints_enabled = true
 
-  pcall(function()
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-  end)
+  local function setup_inlay_hints_impl()
+    vim.b[bufnr].inlay_hints_enabled = true
+
+    pcall(function()
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    end)
+  end
+
+  if client.name == "lua_ls" then
+    -- Work around a lua_ls bug.
+    -- Without this, inlay hints don't appear until scrolling or editing.
+    vim.defer_fn(setup_inlay_hints_impl, 500)
+  else
+    setup_inlay_hints_impl()
+  end
 end
 
 ---@param args table
