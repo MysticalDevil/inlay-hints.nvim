@@ -245,7 +245,7 @@ Configure the following in lazy.nvim for rustaceanvim:
 Source: https://github.com/microsoft/TypeScript/wiki/Standalone-Server-(tsserver)
 
 ```lua
-vim.lsp.config("tsserver", {
+vim.lsp.config("ts_ls", {
   settings = {
     typescript = {
       inlayHints = {
