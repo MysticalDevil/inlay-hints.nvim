@@ -16,7 +16,15 @@ Source: https://github.com/LuaLS/lua-language-server
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
-      hint = { enable = true },
+      hint = {
+        enable = true,              -- Enable inlay hints globally
+        paramName = "All",          -- Parameter name hints: "All" | "Literal" | "Disable"
+        paramType = true,           -- Function parameter type hints
+        setType = true,             -- Assignment type hints
+        arrayIndex = "Auto",        -- Array index hints: "Enable" | "Auto" | "Disable"
+        await = true,               -- Await hints
+        semicolon = "All",          -- Semicolon hints: "All" | "SameLine" | "Disable"
+      },
     },
   },
 })
@@ -31,20 +39,18 @@ Extension: https://github.com/p00f/clangd_extensions.nvim
 
 > If you use `clangd_extensions.nvim`, set `autoSetHints = false`.
 
-```lua
-vim.lsp.config("clangd", {
-  settings = {
-    clangd = {
-      InlayHints = {
-        Enabled = true,
-        ParameterNames = true,
-        DeducedTypes = true,
-        Designators = true,
-      },
-      fallbackFlags = { "-std=c++20" },
-    },
-  },
-})
+clangd does **not** support configuring inlay hints via LSP `settings`.
+Instead, create a `.clangd` file in your project root:
+
+```yaml
+InlayHints:
+  Enabled: true              # Global enable/disable
+  ParameterNames: true       # Parameter name hints in function calls
+  DeducedTypes: true         # Deduced type hints
+  Designators: true          # Aggregate initialization designators
+  BlockEnd: false            # Block end comment hints
+  DefaultArguments: false    # Default argument hints
+  TypeNameLimit: 24          # Type hint character limit (0 = no limit)
 ```
 
 ---
@@ -58,11 +64,17 @@ vim.lsp.config("denols", {
   settings = {
     deno = {
       inlayHints = {
-        parameterNames = { enabled = "all", suppressWhenArgumentMatchesName = true },
+        parameterNames = {
+          enabled = "all",                    -- "none" | "literals" | "all"
+          suppressWhenArgumentMatchesName = true,
+        },
         parameterTypes = { enabled = true },
-        variableTypes = { enabled = true, suppressWhenTypeMatchesName = true },
+        variableTypes = {
+          enabled = true,
+          suppressWhenTypeMatchesName = true,
+        },
         propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enable = true },
+        functionLikeReturnTypes = { enabled = true },  -- Fixed: was "enable"
         enumMemberValues = { enabled = true },
       },
     },
@@ -81,13 +93,14 @@ vim.lsp.config("gopls", {
   settings = {
     gopls = {
       hints = {
-        rangeVariableTypes = true,
-        parameterNames = true,
-        constantValues = true,
-        assignVariableTypes = true,
-        compositeLiteralFields = true,
-        compositeLiteralTypes = true,
-        functionTypeParameters = true,
+        assignVariableTypes = true,      -- Variable type hints in assignments
+        compositeLiteralFields = true,   -- Composite literal field name hints
+        compositeLiteralTypes = true,    -- Composite literal type hints
+        constantValues = true,           -- Constant value hints (iota)
+        functionTypeParameters = true,   -- Generic function type parameter hints
+        ignoredError = true,             -- Implicitly discarded error hints (experimental)
+        parameterNames = true,           -- Function call parameter name hints
+        rangeVariableTypes = true,       -- Range statement variable type hints
       },
     },
   },
@@ -105,10 +118,26 @@ vim.lsp.config("rust_analyzer", {
   settings = {
     ["rust-analyzer"] = {
       inlayHints = {
-        chainingHints = { enable = true },
-        closingBraceHints = { enable = true, minLines = 25 },
-        parameterHints = { enable = true },
-        typeHints = { enable = true },
+        -- Type related
+        typeHints = { enable = true },                          -- Variable type hints
+        chainingHints = { enable = true },                      -- Method chain type hints
+        closureReturnTypeHints = { enable = "never" },          -- "never" | "always"
+        closureCaptureHints = { enable = false },               -- Closure capture hints
+        -- Parameter related
+        parameterHints = { enable = true },                     -- Function parameter hints
+        -- Brace related
+        closingBraceHints = { enable = true, minLines = 25 },   -- Closing brace hints
+        -- Other
+        bindingModeHints = { enable = false },                  -- Binding mode hints
+        discriminantHints = { enable = "never" },               -- Enum discriminant hints
+        expressionAdjustmentHints = { enable = "never" },       -- Type adjustment hints
+        implicitDrops = { enable = false },                     -- Implicit drop hints
+        lifetimeElisionHints = { enable = "never" },            -- Lifetime elision hints
+        genericParameterHints = {
+          type = { enable = false },
+          lifetime = { enable = false },
+          const = { enable = false },
+        },
       },
     },
   },
@@ -266,11 +295,14 @@ Source: https://github.com/zigtools/zls
 vim.lsp.config("zls", {
   settings = {
     zls = {
-      enable_inlay_hints = true,
-      inlay_hints_show_builtin = true,
-      inlay_hints_exclude_single_argument = true,
-      inlay_hints_hide_redundant_param_names = false,
-      inlay_hints_hide_redundant_param_names_last_token = false,
+      enable_inlay_hints = true,                              -- Global enable
+      inlay_hints_show_builtin = true,                        -- Show builtin function hints
+      inlay_hints_show_parameter_name = true,                 -- Show parameter name hints
+      inlay_hints_show_variable_type_hints = true,            -- Show variable type hints
+      inlay_hints_show_struct_literal_field_type = true,      -- Show struct literal field type hints
+      inlay_hints_exclude_single_argument = true,             -- Exclude single argument hints
+      inlay_hints_hide_redundant_param_names = false,         -- Hide redundant parameter names
+      inlay_hints_hide_redundant_param_names_last_token = false, -- Hide redundant param names for last token
     },
   },
 })
@@ -363,9 +395,11 @@ vim.lsp.config("jdtls", {
     java = {
       inlayHints = {
         parameterNames = {
-          enabled = "all",
+          enabled = "all",                    -- "none" | "literals" | "all"
           exclusions = { "this" },
         },
+        variableTypes = { enabled = true },   -- Variable type hints
+        parameterTypes = { enabled = true },  -- Parameter type hints
       },
     },
   },
