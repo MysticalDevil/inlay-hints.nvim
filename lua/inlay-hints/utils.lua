@@ -78,18 +78,18 @@ function M.enable_inlay_hints_autocmd()
 end
 
 function M.toggle_inlay_hints()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ 0 }), { 0 })
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 end
 
 function M.enable_inlay_hints()
-  if not inlay_hint.is_enabled() then
-    inlay_hint.enable(true, nil)
+  if not inlay_hint.is_enabled({ bufnr = 0 }) then
+    inlay_hint.enable(true, { bufnr = 0 })
   end
 end
 
 function M.disable_inlay_hints()
-  if inlay_hint.is_enabled() then
-    inlay_hint.enable(false, nil)
+  if inlay_hint.is_enabled({ bufnr = 0 }) then
+    inlay_hint.enable(false, { bufnr = 0 })
   end
 end
 
