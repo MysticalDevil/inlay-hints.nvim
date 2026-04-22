@@ -2,17 +2,16 @@
 
 A minimal Neovim plugin that simplifies enabling Neovim's **official LSP inlay hints**.
 
-It provides a small wrapper around the built-in inlay hints support introduced in Neovim `0.11+`, making it easier to toggle and auto-enable hints per LSP.
-
 > [!IMPORTANT]
-> This is intentionally a **very simple plugin**. It only integrates how inlay hints are enabled for different LSP servers.
-> If you prefer full manual control, you may want to configure inlay hints directly in your Neovim setup instead.
+> This is intentionally a **very simple plugin**. It only provides a thin wrapper around `vim.lsp.inlay_hint` and collects LSP-specific configuration examples.
+>
+> **You do not need to install this plugin** to use inlay hints. Neovim has built-in support since 0.10+. The most valuable part of this repo is the [LSP Server Configuration](#lsp-server-configuration) section below — you can copy those server settings directly into your own config.
 
 ---
 
 ## Requirements
 
-- Neovim **0.11+**
+- Neovim **0.10+**
 - An LSP server that **supports inlay hints**
 - [`nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig) (optional, but recommended for examples)
 
@@ -48,6 +47,42 @@ require("pckr").add({
   end,
 })
 ```
+
+---
+
+## Manual Setup (Without This Plugin)
+
+If you prefer to keep your config dependency-free, you can achieve the same behavior with a few lines of Lua:
+
+```lua
+-- Auto-enable inlay hints on LspAttach
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client:supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+    end
+  end,
+})
+
+-- User commands
+vim.api.nvim_create_user_command("InlayHintsToggle", function()
+  vim.lsp.inlay_hint.enable(
+    not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }),
+    { bufnr = 0 }
+  )
+end, {})
+
+vim.api.nvim_create_user_command("InlayHintsEnable", function()
+  vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+end, {})
+
+vim.api.nvim_create_user_command("InlayHintsDisable", function()
+  vim.lsp.inlay_hint.enable(false, { bufnr = 0 })
+end, {})
+```
+
+Then jump straight to the [LSP Server Configuration](#lsp-server-configuration) section to see how to enable hints for your language server.
 
 ---
 
