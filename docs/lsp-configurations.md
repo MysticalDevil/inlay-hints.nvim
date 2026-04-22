@@ -317,22 +317,6 @@ vim.lsp.config("ty", {
 
 ---
 
-### pylyzer
-
-Source: https://github.com/mtshiba/pylyzer
-
-```lua
-vim.lsp.config("pylyzer", {
-  settings = {
-    python = {
-      inlayHints = true,
-    },
-  },
-})
-```
-
----
-
 ### kotlin-language-server
 
 Source: https://github.com/fwcd/kotlin-language-server
