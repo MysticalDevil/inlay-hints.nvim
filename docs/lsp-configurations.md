@@ -8,6 +8,8 @@ Below is a complete list of supported / commonly used LSP servers with **explici
 
 ---
 
+## Lua
+
 ### lua_ls
 
 Source: https://github.com/LuaLS/lua-language-server
@@ -32,25 +34,60 @@ vim.lsp.config("lua_ls", {
 
 ---
 
-### clangd
+## JavaScript / TypeScript
 
-Source: https://github.com/clangd/clangd
-Extension: https://github.com/p00f/clangd_extensions.nvim
+### tsserver (typescript-language-server)
 
-> If you use `clangd_extensions.nvim`, set `autoSetHints = false`.
+Source: https://github.com/microsoft/TypeScript/wiki/Standalone-Server-(tsserver)
 
-clangd does **not** support configuring inlay hints via LSP `settings`.
-Instead, create a `.clangd` file in your project root:
+```lua
+vim.lsp.config("ts_ls", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
+    },
+    javascript = {
+      inlayHints = {
+        includeInlayParameterNameHints = "all",
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
+      },
+    },
+  },
+})
+```
 
-```yaml
-InlayHints:
-  Enabled: true              # Global enable/disable
-  ParameterNames: true       # Parameter name hints in function calls
-  DeducedTypes: true         # Deduced type hints
-  Designators: true          # Aggregate initialization designators
-  BlockEnd: false            # Block end comment hints
-  DefaultArguments: false    # Default argument hints
-  TypeNameLimit: 24          # Type hint character limit (0 = no limit)
+---
+
+### tsgo
+
+Source: https://github.com/microsoft/typescript-go
+
+```lua
+vim.lsp.config("tsgo", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = "literals" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+})
 ```
 
 ---
@@ -74,7 +111,7 @@ vim.lsp.config("denols", {
           suppressWhenTypeMatchesName = true,
         },
         propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },  -- Fixed: was "enable"
+        functionLikeReturnTypes = { enabled = true },
         enumMemberValues = { enabled = true },
       },
     },
@@ -83,6 +120,75 @@ vim.lsp.config("denols", {
 ```
 
 ---
+
+### svelte-language-server
+
+Source: https://github.com/sveltejs/language-tools
+
+```lua
+vim.lsp.config("svelte", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = "all" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+})
+```
+
+---
+
+### vtsls
+
+Source: https://github.com/yioneko/vtsls
+
+```lua
+vim.lsp.config("vtsls", {
+  settings = {
+    typescript = {
+      inlayHints = {
+        parameterNames = { enabled = "all" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      },
+    },
+  },
+})
+```
+
+---
+
+## Python
+
+### ty
+
+Source: https://github.com/astral-sh/ty
+
+```lua
+vim.lsp.config("ty", {
+  settings = {
+    ty = {
+      inlayHints = {
+        variableTypes = true,
+        callArgumentNames = true,
+      },
+    },
+  },
+})
+```
+
+---
+
+## Go
 
 ### gopls
 
@@ -108,6 +214,33 @@ vim.lsp.config("gopls", {
 ```
 
 ---
+
+## C / C++
+
+### clangd
+
+Source: https://github.com/clangd/clangd
+Extension: https://github.com/p00f/clangd_extensions.nvim
+
+> If you use `clangd_extensions.nvim`, set `autoSetHints = false`.
+
+clangd does **not** support configuring inlay hints via LSP `settings`.
+Instead, create a `.clangd` file in your project root:
+
+```yaml
+InlayHints:
+  Enabled: true              # Global enable/disable
+  ParameterNames: true       # Parameter name hints in function calls
+  DeducedTypes: true         # Deduced type hints
+  Designators: true          # Aggregate initialization designators
+  BlockEnd: false            # Block end comment hints
+  DefaultArguments: false    # Default argument hints
+  TypeNameLimit: 24          # Type hint character limit (0 = no limit)
+```
+
+---
+
+## Rust
 
 ### rust-analyzer
 
@@ -185,31 +318,61 @@ Configure the following in lazy.nvim for rustaceanvim:
 
 ---
 
-### tsserver (typescript-language-server)
+## C#
 
-Source: https://github.com/microsoft/TypeScript/wiki/Standalone-Server-(tsserver)
+### roslyn (official)
+
+Source: https://github.com/dotnet/roslyn
+Plugin: https://github.com/seblj/roslyn.nvim
+
+> Replaces the discontinued OmniSharp. Used by the VS Code C# extension.
 
 ```lua
-vim.lsp.config("ts_ls", {
+vim.lsp.config("roslyn", {
   settings = {
-    typescript = {
-      inlayHints = {
-        includeInlayParameterNameHints = "all",
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayVariableTypeHints = true,
-        includeInlayPropertyDeclarationTypeHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayEnumMemberValueHints = true,
-      },
+    ["csharp|inlay_hints"] = {
+      csharp_enable_inlay_hints_for_implicit_object_creation = true,
+      csharp_enable_inlay_hints_for_implicit_variable_types = true,
+      csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+      csharp_enable_inlay_hints_for_types = true,
+      dotnet_enable_inlay_hints_for_indexer_parameters = true,
+      dotnet_enable_inlay_hints_for_literal_parameters = true,
+      dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+      dotnet_enable_inlay_hints_for_other_parameters = true,
+      dotnet_enable_inlay_hints_for_parameters = true,
+      dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = false,
+      dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = false,
+      dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = false,
     },
-    javascript = {
-      inlayHints = {
-        includeInlayParameterNameHints = "all",
-        includeInlayFunctionParameterTypeHints = true,
-        includeInlayVariableTypeHints = true,
-        includeInlayPropertyDeclarationTypeHints = true,
-        includeInlayFunctionLikeReturnTypeHints = true,
-        includeInlayEnumMemberValueHints = true,
+  },
+})
+```
+
+---
+
+### OmniSharp (legacy)
+
+Source: https://github.com/OmniSharp/omnisharp-roslyn
+
+> Discontinued. Consider migrating to [roslyn](#roslyn-official).
+
+```lua
+vim.lsp.config("omnisharp", {
+  settings = {
+    RoslynExtensionsOptions = {
+      InlayHintsOptions = {
+        EnableForParameters = true,
+        ForLiteralParameters = true,
+        ForIndexerParameters = true,
+        ForObjectCreationParameters = true,
+        ForOtherParameters = true,
+        SuppressForParametersThatDifferOnlyBySuffix = false,
+        SuppressForParametersThatMatchMethodIntent = false,
+        SuppressForParametersThatMatchArgumentName = false,
+        EnableForTypes = true,
+        ForImplicitVariableTypes = true,
+        ForLambdaParameterTypes = true,
+        ForImplicitObjectCreation = true,
       },
     },
   },
@@ -218,74 +381,7 @@ vim.lsp.config("ts_ls", {
 
 ---
 
-### tsgo
-
-Source: https://github.com/microsoft/typescript-go
-
-```lua
-vim.lsp.config("tsgo", {
-  settings = {
-    typescript = {
-      inlayHints = {
-        parameterNames = { enabled = "literals" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-      },
-    },
-  },
-})
-```
-
----
-
-### svelte-language-server
-
-Source: https://github.com/sveltejs/language-tools
-
-```lua
-vim.lsp.config("svelte", {
-  settings = {
-    typescript = {
-      inlayHints = {
-        parameterNames = { enabled = "all" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-      },
-    },
-  },
-})
-```
-
----
-
-### vtsls
-
-Source: https://github.com/yioneko/vtsls
-
-```lua
-vim.lsp.config("vtsls", {
-  settings = {
-    typescript = {
-      inlayHints = {
-        parameterNames = { enabled = "all" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-      },
-    },
-  },
-})
-```
-
----
+## Zig
 
 ### zls
 
@@ -310,17 +406,23 @@ vim.lsp.config("zls", {
 
 ---
 
-### ty
+## JVM
 
-Source: https://github.com/astral-sh/ty
+### eclipse.jdt.ls (Java)
+
+Source: https://github.com/eclipse-jdtls/eclipse.jdt.ls
 
 ```lua
-vim.lsp.config("ty", {
+vim.lsp.config("jdtls", {
   settings = {
-    ty = {
+    java = {
       inlayHints = {
-        variableTypes = true,
-        callArgumentNames = true,
+        parameterNames = {
+          enabled = "all",                    -- "none" | "literals" | "all"
+          exclusions = { "this" },
+        },
+        variableTypes = { enabled = true },   -- Variable type hints
+        parameterTypes = { enabled = true },  -- Parameter type hints
       },
     },
   },
@@ -385,60 +487,7 @@ vim.lsp.config("kotlin", {
 
 ---
 
-### eclipse.jdt.ls
-
-Source: https://github.com/eclipse-jdtls/eclipse.jdt.ls
-
-```lua
-vim.lsp.config("jdtls", {
-  settings = {
-    java = {
-      inlayHints = {
-        parameterNames = {
-          enabled = "all",                    -- "none" | "literals" | "all"
-          exclusions = { "this" },
-        },
-        variableTypes = { enabled = true },   -- Variable type hints
-        parameterTypes = { enabled = true },  -- Parameter type hints
-      },
-    },
-  },
-})
-```
-
-
----
-
-### OmniSharp
-
-Source: https://github.com/OmniSharp/omnisharp-roslyn
-
-> Experimental / may vary by version
-
-```lua
-vim.lsp.config("omnisharp", {
-  settings = {
-    RoslynExtensionsOptions = {
-      InlayHintsOptions = {
-        EnableForParameters = true,
-        ForLiteralParameters = true,
-        ForIndexerParameters = true,
-        ForObjectCreationParameters = true,
-        ForOtherParameters = true,
-        SuppressForParametersThatDifferOnlyBySuffix = false,
-        SuppressForParametersThatMatchMethodIntent = false,
-        SuppressForParametersThatMatchArgumentName = false,
-        EnableForTypes = true,
-        ForImplicitVariableTypes = true,
-        ForLambdaParameterTypes = true,
-        ForImplicitObjectCreation = true,
-      },
-    },
-  },
-})
-```
-
----
+## Others
 
 ### Ruby LSP
 
