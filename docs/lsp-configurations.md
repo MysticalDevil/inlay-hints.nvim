@@ -169,6 +169,32 @@ vim.lsp.config("vtsls", {
 
 ## Python
 
+### basedpyright
+
+Source: https://github.com/DetachHead/basedpyright
+
+> Inlay hints are **enabled by default** in basedpyright. The configuration below is only needed if you want to customize specific hints.
+
+```lua
+vim.lsp.config("basedpyright", {
+  settings = {
+    basedpyright = {
+      analysis = {
+        inlayHints = {
+          variableTypes = true,              -- Variable type hints
+          callArgumentNames = true,          -- Function argument name hints
+          callArgumentNamesMatching = false, -- Show even when arg name matches param name
+          functionReturnTypes = true,        -- Function return type hints
+          genericTypes = true,               -- Inferred generic type hints
+        },
+      },
+    },
+  },
+})
+```
+
+---
+
 ### ty
 
 Source: https://github.com/astral-sh/ty
