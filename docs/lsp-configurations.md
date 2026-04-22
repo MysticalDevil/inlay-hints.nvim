@@ -317,7 +317,7 @@ vim.lsp.config("ty", {
 
 ---
 
-### kotlin-language-server
+### kotlin-language-server (community)
 
 Source: https://github.com/fwcd/kotlin-language-server
 
@@ -328,8 +328,44 @@ vim.lsp.config("kotlin_language_server", {
       hints = {
         typeHints = true,
         parameterHints = true,
-        chainHints = true,
+        chainedHints = true,
       },
+    },
+  },
+})
+```
+
+---
+
+### kotlin-lsp (JetBrains official, pre-alpha)
+
+Source: https://github.com/Kotlin/kotlin-lsp
+
+> **Pre-alpha / experimental**. Based on IntelliJ IDEA. Currently only JVM-only Gradle projects are supported.
+
+```lua
+vim.lsp.config("kotlin", {
+  settings = {
+    ["jetbrains.kotlin.hints"] = {
+      settings = {
+        types = {
+          property = true,    -- Property type hints
+          variable = true,    -- Local variable type hints
+        },
+      },
+      type = {
+        ["function"] = {
+          return = true,      -- Function return type hints
+          parameter = true,   -- Function parameter type hints
+        },
+      },
+      lambda = {
+        receivers = {
+          parameters = true,  -- Implicit receivers and parameters
+        },
+      },
+      parameters = true,            -- Parameter names
+      ["call.chains"] = false,      -- Function return type in call chains
     },
   },
 })
