@@ -36,16 +36,14 @@ require("lazy").setup({
 })
 ```
 
-### pckr.nvim
+### vim.pack (Neovim 0.12+ built-in)
 
 ```lua
-require("pckr").add({
-  "MysticalDevil/inlay-hints.nvim",
-  requires = { "neovim/nvim-lspconfig" }, -- optional
-  config = function()
-    require("inlay-hints").setup()
-  end,
+vim.pack.add({
+  { src = 'https://github.com/MysticalDevil/inlay-hints.nvim' },
 })
+
+require("inlay-hints").setup()
 ```
 
 ---
@@ -93,7 +91,7 @@ Then jump straight to the [LSP Server Configuration](#lsp-server-configuration) 
 If you don’t want to enable inlay hints globally, attach them manually in your LSP `on_attach` function:
 
 ```lua
-require("lspconfig")[server_name].setup({
+vim.lsp.config("lua_ls", {
   on_attach = function(client, bufnr)
     require("inlay-hints").on_attach(client, bufnr)
   end,
