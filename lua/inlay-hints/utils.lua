@@ -31,11 +31,12 @@ local function setup_inlay_hints(client, bufnr)
   end
 
   local function setup_inlay_hints_impl()
-    vim.b[bufnr].inlay_hints_enabled = true
-
-    pcall(function()
+    local enable_ok = pcall(function()
       vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     end)
+    if enable_ok then
+      vim.b[bufnr].inlay_hints_enabled = true
+    end
   end
 
   if client.name == "lua_ls" then
