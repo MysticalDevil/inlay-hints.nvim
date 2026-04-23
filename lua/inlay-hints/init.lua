@@ -1,4 +1,4 @@
-if not vim.fn.has("nvim-0.10") then
+if vim.fn.has("nvim-0.10") == 0 then
   vim.notify("This plugin only works with neovim 0.10+, please update your neovim version", vim.log.levels.ERROR)
   return
 end
