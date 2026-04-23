@@ -2,9 +2,11 @@ local M = {}
 
 local inlay_hint = vim.lsp.inlay_hint
 
--- Setup inlay hints feature for supported LSP
----@param client (table|nil)
----@param bufnr (integer|nil)
+---Enable inlay hints for the given LSP client and buffer.
+---Performs capability checks, filters unstable servers, and applies
+---a deferred workaround for `lua_ls`.
+---@param client vim.lsp.Client|nil The LSP client instance.
+---@param bufnr integer|nil Buffer number.
 local function setup_inlay_hints(client, bufnr)
   if not client then
     vim.notify_once("LSP inlay hints attached failed: nil client.", vim.log.levels.ERROR)
@@ -48,7 +50,8 @@ local function setup_inlay_hints(client, bufnr)
   end
 end
 
----@param args table
+---Callback for the `LspAttach` autocmd.
+---@param args vim.api.keyset.create_autocmd.callback_args Autocmd callback arguments.
 local function lsp_attach_inlay_hints(args)
   if not (args.data and args.data.client_id) then
     return
@@ -60,11 +63,17 @@ local function lsp_attach_inlay_hints(args)
   setup_inlay_hints(client, bufnr)
 end
 
+---Attach inlay hints for the given LSP client and buffer.
+---Intended for use inside an LSP `on_attach` callback.
+---@param client vim.lsp.Client|nil The LSP client instance.
+---@param bufnr integer|nil Buffer number (defaults to 0).
 function M.on_attach(client, bufnr)
   setup_inlay_hints(client, bufnr)
 end
 
--- Provide a autocmd to enable inlay hints when the LspAttach event is actived
+---Create the `LspSetup_Inlayhints` autocommand group and register
+---an `LspAttach` autocmd that enables inlay hints automatically.
+---Also sets up the default highlight link for `LspInlayHint`.
 function M.enable_inlay_hints_autocmd()
   vim.api.nvim_create_augroup("LspSetup_Inlayhints", { clear = true })
   vim.cmd.highlight("default link LspInlayHint Comment")
@@ -77,16 +86,19 @@ function M.enable_inlay_hints_autocmd()
   })
 end
 
+---Toggle inlay hints for the current buffer.
 function M.toggle_inlay_hints()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 end
 
+---Enable inlay hints for the current buffer (idempotent).
 function M.enable_inlay_hints()
   if not inlay_hint.is_enabled({ bufnr = 0 }) then
     inlay_hint.enable(true, { bufnr = 0 })
   end
 end
 
+---Disable inlay hints for the current buffer (idempotent).
 function M.disable_inlay_hints()
   if inlay_hint.is_enabled({ bufnr = 0 }) then
     inlay_hint.enable(false, { bufnr = 0 })
