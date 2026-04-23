@@ -14,10 +14,9 @@ local function setup_inlay_hints(client, bufnr)
   -- Filtering unstable LSPs
   local unstable = {
     phpactor = true,
-    tsserver = false,
   }
   if unstable[client.name] then
-    vim.notify(("Skip inlay hints for LSP: %s"):format(client.name), vim.log.levels.ERROR)
+    vim.notify(("Skip inlay hints for LSP: %s"):format(client.name), vim.log.levels.WARN)
     return
   end
 
