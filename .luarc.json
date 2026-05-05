@@ -1,4 +1,10 @@
 {
+  "runtime.version": "LuaJIT",
+  "diagnostics": {
+    "neededFileStatus": {
+      "codestyle-check": "Any"
+    }
+  },
   "workspace.library": [
     "/usr/share/nvim/runtime/lua"
   ]

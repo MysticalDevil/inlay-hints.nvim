@@ -8,6 +8,8 @@ local inlay_hint = vim.lsp.inlay_hint
 ---@param client vim.lsp.Client|nil The LSP client instance.
 ---@param bufnr integer|nil Buffer number.
 local function setup_inlay_hints(client, bufnr)
+  bufnr = bufnr or 0
+
   if not client then
     vim.notify_once("LSP inlay hints attached failed: nil client.", vim.log.levels.ERROR)
     return
@@ -76,7 +78,6 @@ end
 ---Also sets up the default highlight link for `LspInlayHint`.
 function M.enable_inlay_hints_autocmd()
   vim.api.nvim_create_augroup("LspSetup_Inlayhints", { clear = true })
-  vim.cmd.highlight("default link LspInlayHint Comment")
 
   vim.api.nvim_create_autocmd("LspAttach", {
     group = "LspSetup_Inlayhints",

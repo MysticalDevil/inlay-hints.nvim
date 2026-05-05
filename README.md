@@ -36,7 +36,7 @@ require("lazy").setup({
 })
 ```
 
-### vim.pack (Neovim 0.12+ built-in)
+### vim.pack (Neovim 0.11+ built-in)
 
 ```lua
 vim.pack.add({

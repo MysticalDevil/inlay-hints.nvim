@@ -29,6 +29,9 @@ local function validate_option(key, default_val)
       vim.log.levels.WARN
     )
     config.options[key] = vim.deepcopy(default_val)
+  elseif val.enable == nil then
+    vim.notify(string.format("[inlay-hints] Missing '%s.enable' key. Using default.", key), vim.log.levels.WARN)
+    config.options[key] = vim.deepcopy(default_val)
   end
 end
 

@@ -9,6 +9,7 @@ local M = {}
 ---@param user_config table|nil Optional user configuration. See |inlay-hints.config|.
 M.setup = function(user_config)
   vim.validate({ user_config = { user_config, "table", true } })
+  vim.cmd.highlight("default link LspInlayHint Comment")
   require("inlay-hints.config").load(user_config)
 end
 
